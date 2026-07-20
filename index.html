@@ -604,21 +604,25 @@ document.getElementById('addFlowerForm').addEventListener('submit', function(e) 
             renderSuperAdminFlowers();
         });
 
-window.editFlowerData = function(name, tier, img, id) {
-            document.getElementById('editFlowerId').value = id;
-            document.getElementById('fName').value = name;
-            document.getElementById('fTier').value = tier;
+window.editFlowerData = function(id) {
+            // Tìm kiếm dữ liệu gốc từ bộ nhớ dựa vào ID được truyền tới
+            const flower = (DB.globalFlowers || []).find(f => f.id === id);
+            if (!flower) return alert("Không tìm thấy dữ liệu hoa!");
+
+            document.getElementById('editFlowerId').value = flower.id;
+            document.getElementById('fName').value = flower.name;
+            document.getElementById('fTier').value = flower.tier;
             
-            if (img.startsWith('http')) {
-                document.getElementById('fUrl').value = img;
+            if (flower.img.startsWith('http')) {
+                document.getElementById('fUrl').value = flower.img;
                 globalBase64Image = "";
             } else {
                 document.getElementById('fUrl').value = "";
-                globalBase64Image = img;
+                globalBase64Image = flower.img;
             }
             
             const preview = document.getElementById('fPreview');
-            preview.src = img;
+            preview.src = flower.img;
             preview.style.display = "block";
 
             document.getElementById('flowerFormTitle').innerHTML = `<i class="bi bi-pencil-square text-warning"></i> Sửa Lỗi Hiển Thị Hoa`;
@@ -651,18 +655,14 @@ function renderSuperAdminFlowers() {
                 if(searchKw !== "" && !f.name.toLowerCase().includes(searchKw)) return;
                 const badgeInfo = getTierClass(f.tier);
                 
-                // Chuẩn hóa chuỗi bằng cách encode sang JSON an toàn, tránh hoàn toàn lỗi dấu nháy
-                const safeName = encodeURIComponent(f.name);
-                const safeTier = encodeURIComponent(f.tier);
-                const safeImg = encodeURIComponent(f.img);
-                
+                // Giải pháp an toàn tuyệt đối: Chỉ truyền f.id vào hàm onclick
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${f.img}" style="width:35px;height:35px;object-fit:cover;border-radius:4px;"></td>
                         <td><strong>${f.name}</strong></td>
                         <td><span class="badge ${badgeInfo.badge}">${f.tier}</span></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData(decodeURIComponent('${safeName}'), decodeURIComponent('${safeTier}'), decodeURIComponent('${safeImg}'), '${f.id}')">Sửa</button>
+                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData('${f.id}')">Sửa</button>
                             <button class="btn btn-sm btn-outline-danger py-0" onclick="deleteGlobalFlower('${f.id}')">Xóa</button>
                         </td>
                     </tr>`;
