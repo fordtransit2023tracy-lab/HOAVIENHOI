@@ -712,7 +712,7 @@
             resetGroupForm();
         }
 
-        function renderStats() {
+function renderStats() {
             const container = document.getElementById('flowerGridContainer');
             if(!container) return;
             container.innerHTML = '';
@@ -737,6 +737,7 @@
                 let ownersHtml = owners.map(o => `<span class="member-tag"><i class="bi bi-person"></i> ${o.name} <span class="role-badge ${getRoleBadgeClass(o.role)}">${o.role}</span></span>`).join('');
                 if(owners.length === 0) ownersHtml = '<span class="text-muted small italic d-block mt-1">Chưa ai có</span>';
                 
+                // ĐÃ BỎ: max-height và overflow-y ở phần hiển thị danh sách thành viên sở hữu
                 container.innerHTML += `
                     <div class="col-6 col-sm-4 col-md-3 col-lg-2">
                         <div class="flower-grid-card ${tierInfo.class}">
@@ -747,7 +748,7 @@
                             </div>
                             <div class="flower-grid-footer">
                                 <div class="fw-bold text-dark small mb-1" style="font-size:0.72rem;">Sở hữu (${owners.length}):</div>
-                                <div style="max-height:65px; overflow-y:auto;">${ownersHtml}</div>
+                                <div>${ownersHtml}</div>
                             </div>
                         </div>
                     </div>`;
