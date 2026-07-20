@@ -13,8 +13,8 @@
         .card { border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-radius: 12px; }
 /* 1. Tăng chiều ngang của khu vực chứa lưới hoa thêm ~10% bằng cách mở rộng khung ép (Container) */
 .flower-container-centered {
-max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu vực này ở mức 70% */
-    width: 50% !important;       /* Ép độ rộng đạt đúng tỷ lệ 70% */
+max-width: 60% !important;   /* Giới hạn độ rộng tối đa của khu vực này ở mức 70% */
+    width: 60% !important;       /* Ép độ rộng đạt đúng tỷ lệ 70% */
     margin-left: auto !important;  /* Căn lề trái tự động để đẩy vào giữa */
     margin-right: auto !important; /* Căn lề phải tự động để đẩy vào giữa */
     padding-left: 10px;
@@ -227,7 +227,7 @@ max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu v�
                     <span class="sync-indicator"><i class="bi bi-cloud-check"></i> Đã đồng bộ Live</span>
                 </span>
                 <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" id="userRoleBadge">Thành viên</span>
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold" id="userRoleBadge">Hội viên</span>
                     <button class="btn btn-sm btn-danger rounded-pill fw-bold" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Rời khỏi</button>
                 </div>
             </div>
@@ -296,7 +296,7 @@ max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu v�
                                 <form id="addMemberForm">
                                     <input type="hidden" id="editMemberId" value="">
                                     <div class="mb-2">
-                                        <label class="form-label small fw-bold">Họ tên thành viên</label>
+                                        <label class="form-label small fw-bold">Họ tên Hội viên</label>
                                         <input type="text" id="mName" class="form-control form-control-sm" required>
                                     </div>
                                     <div class="mb-2">
@@ -306,7 +306,7 @@ max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu v�
                                     <div class="mb-3">
                                         <label class="form-label small fw-bold">Chức vụ gán</label>
                                         <select id="mRole" class="form-select form-select-sm">
-                                            <option value="Thành viên">Thành viên</option>
+                                            <option value="Hội viên">Hội viên</option>
                                             <option value="Tinh anh">Tinh anh</option>
                                             <option value="Quản lý">Quản lý</option>
                                             <option value="Hội phó">Hội phó</option>
@@ -334,7 +334,7 @@ max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu v�
 
                         <div class="col-md-8">
                             <div class="card p-3">
-                                <h6 class="fw-bold text-secondary mb-2">Danh Sách Thành Viên</h6>
+                                <h6 class="fw-bold text-secondary mb-2">Danh Sách Hội Viên</h6>
                                 <div class="table-responsive leader-member-table-wrapper">
                                     <table class="table table-sm align-middle mb-0">
                                         <thead class="table-light sticky-top"><tr><th>Họ Tên</th><th>SĐT</th><th>Chức Vụ</th><th class="text-center">Hành động của Ban Điều Hành</th></tr></thead>
@@ -642,7 +642,7 @@ max-width: 50% !important;   /* Giới hạn độ rộng tối đa của khu v�
                 });
 
                 tr.querySelector('.btn-del-g').addEventListener('click', () => {
-                    if(confirm('Bạn có chắc muốn xóa Hội này cùng toàn bộ danh sách thành viên đi kèm không?')){
+                    if(confirm('Bạn có chắc muốn xóa Hội này cùng toàn bộ danh sách Hội viên đi kèm không?')){
                         delete DB.groups[id];
                         delete DB.members[id];
                         pushDataToServer();
@@ -858,7 +858,7 @@ function renderStats() {
                     document.getElementById('mName').value = m.name;
                     document.getElementById('mPhone').value = m.phone;
                     document.getElementById('mRole').value = m.role;
-                    document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-pencil-square"></i> Cập Nhật Thành Viên`;
+                    document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-pencil-square"></i> Cập Nhật Hội Viên`;
                     document.getElementById('btnCancelEditMember').classList.remove('d-none');
                     document.getElementById('btnSubmitMember').textContent = "Lưu Sửa Đổi";
                     document.getElementById('btnSubmitMember').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
@@ -892,7 +892,7 @@ function renderStats() {
                     members[idx].name = name;
                     members[idx].phone = phone;
                     members[idx].role = role;
-                    alert('Cập nhật thành viên thành công!');
+                    alert('Cập nhật Hội viên thành công!');
                 }
             } else {
                 if(members.some(m => m.phone === phone)) return alert('SĐT này đã tồn tại!');
