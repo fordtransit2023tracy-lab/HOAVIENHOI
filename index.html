@@ -13,10 +13,20 @@
         .card { border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-radius: 12px; }
 /* 1. Tăng chiều ngang của khu vực chứa lưới hoa thêm ~10% bằng cách mở rộng khung ép (Container) */
 .flower-container-centered {
-    max-width: 80% !important; /* Cho phép giãn tối đa theo màn hình */
-    width: 80%;
+max-width: 80% !important;   /* Giới hạn độ rộng tối đa của khu vực này ở mức 80% */
+    width: 80% !important;       /* Ép độ rộng đạt đúng tỷ lệ 80% */
+    margin-left: auto !important;  /* Căn lề trái tự động để đẩy vào giữa */
+    margin-right: auto !important; /* Căn lề phải tự động để đẩy vào giữa */
     padding-left: 10px;
     padding-right: 10px;
+}
+
+/* Đảm bảo khi xem trên điện thoại (màn hình nhỏ) giao diện vẫn tự động giãn đầy 100% để không bị quá nhỏ */
+@media (max-width: 768px) {
+    .flower-container-centered {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
 }
         .grid-scroll-zone { max-height: 65vh; overflow-y: auto; padding-right: 5px; }
         .admin-flower-table-wrapper { max-height: 400px; overflow-y: auto; }
@@ -36,7 +46,7 @@
 
 /* 2. Giảm 10% cỡ chữ của tên thành viên (từ ~12px mặc định xuống còn ~10.8px) */
 .member-tag {
-    font-size: 0.75rem !important; /* Giảm ~10% giúp tên dài hiển thị gọn hơn */
+    font-size: 0.875rem !important; /* Giảm ~10% giúp tên dài hiển thị gọn hơn */
     padding: 2px 4px !important;   /* Thu nhỏ khoảng cách đệm một chút cho vừa vặn */
     display: inline-flex;
     align-items: center;
@@ -46,7 +56,7 @@
 
 /* Giảm nhẹ font chữ của badge chức vụ đi kèm tên thành viên cho cân đối */
 .role-badge {
-    font-size: 0.60rem !important;
+    font-size: 0.75rem !important;
 }
         
         /* Định dạng đường viền 5 Phẩm Cấp Hoa */
