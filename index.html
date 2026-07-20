@@ -11,7 +11,13 @@
         .bg-super-admin { background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); color: white; }
         .bg-gradient-premium { background: linear-gradient(135deg, #1e4620 0%, #0f2a12 100%); color: white; }
         .card { border: none; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border-radius: 12px; }
-        .flower-container-centered { max-width: 1200px; margin-left: auto; margin-right: auto; }
+/* 1. Tăng chiều ngang của khu vực chứa lưới hoa thêm ~10% bằng cách mở rộng khung ép (Container) */
+.flower-container-centered {
+    max-width: 100% !important; /* Cho phép giãn tối đa theo màn hình */
+    width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+}
         .grid-scroll-zone { max-height: 65vh; overflow-y: auto; padding-right: 5px; }
         .admin-flower-table-wrapper { max-height: 400px; overflow-y: auto; }
         .admin-group-table-wrapper { max-height: 320px; overflow-y: auto; }
@@ -28,8 +34,20 @@
         /* Checkbox tùy biến đè lên hình ảnh ở tab Hoa tôi sở hữu */
         .flower-check-input { position: absolute; top: 8px; left: 8px; width: 20px; height: 20px; z-index: 10; cursor: pointer; }
 
-        .member-tag { background: #e8f5e9; color: #1b5e20; padding: 2px 6px; border-radius: 12px; display: inline-block; margin: 2px; font-size: 0.72rem; border: 1px solid #c8e6c9; }
-        .role-badge { font-size: 0.62rem; padding: 1px 4px; border-radius: 6px; font-weight: bold; }
+/* 2. Giảm 10% cỡ chữ của tên thành viên (từ ~12px mặc định xuống còn ~10.8px) */
+.member-tag {
+    font-size: 0.68rem !important; /* Giảm ~10% giúp tên dài hiển thị gọn hơn */
+    padding: 2px 4px !important;   /* Thu nhỏ khoảng cách đệm một chút cho vừa vặn */
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 2px 1px;
+}
+
+/* Giảm nhẹ font chữ của badge chức vụ đi kèm tên thành viên cho cân đối */
+.role-badge {
+    font-size: 0.55rem !important;
+}
         
         /* Định dạng đường viền 5 Phẩm Cấp Hoa */
         .tier-do { border-top: 3px solid #d32f2f; }
