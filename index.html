@@ -604,7 +604,7 @@ document.getElementById('addFlowerForm').addEventListener('submit', function(e) 
             renderSuperAdminFlowers();
         });
 
-        window.editFlowerData = function(id, name, tier, img) {
+window.editFlowerData = function(name, tier, img, id) {
             document.getElementById('editFlowerId').value = id;
             document.getElementById('fName').value = name;
             document.getElementById('fTier').value = tier;
@@ -614,7 +614,7 @@ document.getElementById('addFlowerForm').addEventListener('submit', function(e) 
                 globalBase64Image = "";
             } else {
                 document.getElementById('fUrl').value = "";
-                globalBase64Image = img; // Lưu trữ Base64 cũ
+                globalBase64Image = img;
             }
             
             const preview = document.getElementById('fPreview');
@@ -638,27 +638,36 @@ document.getElementById('addFlowerForm').addEventListener('submit', function(e) 
             document.getElementById('btnSubmitFlower').textContent = "Thêm Vào Đám Mây";
         }
 
-        function renderSuperAdminFlowers() {
-            const tbody = document.getElementById('superAdminFlowerTable'); tbody.innerHTML = '';
-            const keyword = document.getElementById('adminSearchFlower').value.trim().toLowerCase();
+function renderSuperAdminFlowers() {
+            const tbody = document.getElementById('superAdminFlowerTable'); 
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            const searchKw = document.getElementById('adminSearchFlower').value.toLowerCase().trim();
+            
+            let list = DB.globalFlowers || [];
+            let sorted = sortFlowersByTier(list);
 
-            const sortedGlobal = sortFlowersByTier(DB.globalFlowers);
-            const filteredFlowers = sortedGlobal.filter(f => f.name.toLowerCase().includes(keyword));
-
-            filteredFlowers.forEach((f) => {
-                'const originalIndex = DB.globalFlowers.findIndex(gf => gf.id === f.id);
-                const cfg = getTierClass(f.tier);
+            sorted.forEach(f => {
+                if(searchKw !== "" && !f.name.toLowerCase().includes(searchKw)) return;
+                const badgeInfo = getTierClass(f.tier);
+                
+                // Chuẩn hóa chuỗi bằng cách encode sang JSON an toàn, tránh hoàn toàn lỗi dấu nháy
+                const safeName = encodeURIComponent(f.name);
+                const safeTier = encodeURIComponent(f.tier);
+                const safeImg = encodeURIComponent(f.img);
+                
                 tbody.innerHTML += `
-                    <tr class="${cfg.class}">
-                        <td><img src="${f.img}" width="38" height="38" style="object-fit:cover; border-radius:4px;"></td>
+                    <tr>
+                        <td><img src="${f.img}" style="width:35px;height:35px;object-fit:cover;border-radius:4px;"></td>
                         <td><strong>${f.name}</strong></td>
-                        <td><span class="badge ${cfg.badge}">${f.tier}</span></td>
+                        <td><span class="badge ${badgeInfo.badge}">${f.tier}</span></td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData('${f.id}', '${f.name}', '${f.tier}', '${safeImg}')">Sửa</button>
-                            <button class="btn btn-sm btn-danger py-0" onclick="deleteGlobalFlower('${f.id}')">Xóa</button>
+                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData(decodeURIComponent('${safeName}'), decodeURIComponent('${safeTier}'), decodeURIComponent('${safeImg}'), '${f.id}')">Sửa</button>
+                            <button class="btn btn-sm btn-outline-danger py-0" onclick="deleteGlobalFlower('${f.id}')">Xóa</button>
                         </td>
                     </tr>`;
             });
+        }
             if(filteredFlowers.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted small py-3">Không tìm thấy hoa phù hợp</td></tr>`;
             }
