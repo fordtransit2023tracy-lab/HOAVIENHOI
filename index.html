@@ -19,7 +19,6 @@
 
         /* Cấu trúc Card Hoa đồng bộ hệ thống */
         .flower-grid-card { border: 1px solid #e0e0e0; border-radius: 10px; overflow: hidden; background: #fff; transition: transform 0.2s, box-shadow 0.2s; height: 100%; display: flex; flex-direction: column; position: relative; }
-
         .flower-grid-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
         .flower-grid-img { width: 100%; height: 110px; object-fit: cover; background: #eee; }
         .flower-grid-body { padding: 8px; flex-grow: 1; display: flex; flex-direction: column; text-align: center; }
@@ -31,6 +30,7 @@
 
         .member-tag { background: #e8f5e9; color: #1b5e20; padding: 2px 6px; border-radius: 12px; display: inline-block; margin: 2px; font-size: 0.72rem; border: 1px solid #c8e6c9; }
         .role-badge { font-size: 0.62rem; padding: 1px 4px; border-radius: 6px; font-weight: bold; }
+        
         /* Định dạng đường viền 5 Phẩm Cấp Hoa */
         .tier-do { border-top: 3px solid #d32f2f; }
         .tier-cam { border-top: 3px solid #f57c00; }
@@ -44,6 +44,7 @@
         .badge-tim { background-color: #7b1fa2; color: white; }
         .badge-lam { background-color: #1976d2; color: white; }
         .badge-xanh { background-color: #388e3c; color: white; }
+        
         .paste-zone { border: 2px dashed #ccc; padding: 10px; text-align: center; background: #fafafa; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .paste-zone:hover { border-color: #198754; background: #f1f9f5; }
         .preview-img { max-width: 80px; max-height: 80px; object-fit: cover; border-radius: 5px; display: none; margin: 10px auto 0; }
@@ -122,10 +123,9 @@
                     </div>
                     
                     <div class="card p-3">
-                        <h6 class="fw-bold text-success mb-2"><i class="bi bi-flower1"></i> Thêm Hoa Hệ Thống</h6>
+                        <h6 class="fw-bold text-success mb-2" id="flowerFormTitle"><i class="bi bi-flower1"></i> Thêm Hoa Hệ Thống</h6>
                         <form id="addFlowerForm">
-                        <!-- Dòng ẩn này mới được thêm vào để lưu ID khi sửa hoa -->
-                        <input type="hidden" id="editFlowerId" value="">
+                            <input type="hidden" id="editFlowerId" value="">
                             
                             <input type="text" id="fName" class="form-control form-control-sm mb-2" placeholder="Tên loài hoa" required>
                             <select id="fTier" class="form-select form-select-sm mb-2">
@@ -150,10 +150,9 @@
                             </div>
                             <img id="fPreview" class="preview-img">
                             
-                            <!-- Cụm nút bấm này được cải tiến để có thêm nút "Hủy" khi đang sửa -->
                             <div class="d-flex gap-2 mt-2">
-                             <button type="submit" class="btn btn-success btn-sm w-100 fw-bold mt-2">Thêm Vào Kho Đám Mây</button>
-                             <button type="button" id="btnCancelEditFlower" class="btn btn-secondary btn-sm d-none" onclick="resetFlowerForm()">Hủy</button>
+                                <button type="submit" id="btnSubmitFlower" class="btn btn-success btn-sm flex-grow-1 fw-bold">Thêm Vào Kho Đám Mây</button>
+                                <button type="button" id="btnCancelEditFlower" class="btn btn-secondary btn-sm d-none" onclick="resetFlowerForm()">Hủy</button>
                             </div>
                         </form>
                     </div>
@@ -236,8 +235,7 @@
                 </div>
 
                 <div class="tab-pane fade" id="panel-myflower" role="tabpanel">
-
-                                        <div class="flower-container-centered">
+                    <div class="flower-container-centered">
                         <div class="card p-4">
                             <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                                 <div>
@@ -259,7 +257,7 @@
                                 </div>
                             </form>
                         </div>
-                 </div>
+                    </div>
                 </div>
 
                 <div class="tab-pane fade id-leader-only" id="panel-members" role="tabpanel">
@@ -323,28 +321,25 @@
         </div>
     </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <script>
         // ==========================================
-        // ⚠️ BƯỚC QUAN TRỌNG: THAY ĐOẠN CẤU HÌNH DƯỚI ĐÂY THÀNH CỦA BẠN ⚠️
+        // Cấu hình Firebase công cộng giữ nguyên 100%
         // ==========================================
+        const firebaseConfig = {
+          apiKey: "AIzaSyBRfpXXj608vP4iWimSFsvyiyu86Pkzhew",
+          authDomain: "hoaviencuatoi-66c6b.firebaseapp.com",
+          databaseURL: "https://hoaviencuatoi-66c6b-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "hoaviencuatoi-66c6b",
+          storageBucket: "hoaviencuatoi-66c6b.firebasestorage.app",
+          messagingSenderId: "13449362780",
+          appId: "1:13449362780:web:74f775593b159087e11599",
+          measurementId: "G-YD4DKCSYPQ"
+        };
         
-const firebaseConfig = {
-  apiKey: "AIzaSyBRfpXXj608vP4iWimSFsvyiyu86Pkzhew",
-  authDomain: "hoaviencuatoi-66c6b.firebaseapp.com",
-  databaseURL: "https://hoaviencuatoi-66c6b-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "hoaviencuatoi-66c6b",
-  storageBucket: "hoaviencuatoi-66c6b.firebasestorage.app",
-  messagingSenderId: "13449362780",
-  appId: "1:13449362780:web:74f775593b159087e11599",
-  measurementId: "G-YD4DKCSYPQ"
-};
-        
-        // Khởi tạo Firebase kết nối Cloud công cộng
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -354,7 +349,7 @@ const firebaseConfig = {
         let currentUser = null;
         let currentGroupId = null;
 
-        // Tự động lắng nghe thay đổi từ máy chủ (Bất kỳ thiết bị nào cập nhật, máy khác nhận ngay lập tức)
+        // Tự động lắng nghe thay đổi đồng bộ từ máy chủ Realtime
         database.ref('HOI_VIEN_DATA_V5').on('value', (snapshot) => {
             const serverData = snapshot.val();
             if (serverData) {
@@ -363,11 +358,10 @@ const firebaseConfig = {
                 if(!DB.members) DB.members = {};
                 if(!DB.globalFlowers) DB.globalFlowers = [];
             } else {
-                // Khởi tạo khung mẫu nếu database trống tinh
                 DB = {
                     groups: { "G_1": { name: "Hội Mẫu Đơn Sài Gòn" } },
                     members: { "G_1": [{ id: 111, name: "Admin Thử Nghiệm", phone: "0912345678", role: "Hội trưởng", ownedFlowers: [] }] },
-                    globalFlowers: [{ id: "FL_1", name: "Mẫu Đơn Đỏ Cao Cấp", img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400", tier: "Hoa phẩm đỏ" }]
+                    globalFlowers: [{ id: "FL_1", name: "Mẫu Đơn Đỏ", img: "https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=400", tier: "Hoa phẩm đỏ" }]
                 };
                 pushDataToServer();
             }
@@ -378,7 +372,6 @@ const firebaseConfig = {
                 renderSuperAdminFlowers();
             }
             if (!document.getElementById('mainSection').classList.contains('d-none')) {
-                // Đồng bộ cập nhật lại thông tin user hiện tại nếu có thiết bị khác sửa đổi
                 if (currentUser && currentGroupId) {
                     const freshMembers = DB.members[currentGroupId] || [];
                     const freshUser = freshMembers.find(m => m.phone === currentUser.phone);
@@ -429,13 +422,13 @@ const firebaseConfig = {
                 default: return 'bg-secondary text-white';
             }
         }
-        // Định vị cấu trúc trọng số phân cấp sắp xếp 5 loài hoa
+
         function getTierClass(tier) {
             if(tier === 'Hoa phẩm đỏ') return { class: 'tier-do', badge: 'badge-do', weight: 1 };
             if(tier === 'Hoa phẩm cam') return { class: 'tier-cam', badge: 'badge-cam', weight: 2 };
             if(tier === 'Hoa phẩm tím') return { class: 'tier-tim', badge: 'badge-tim', weight: 3 };
             if(tier === 'Hoa phẩm lam') return { class: 'tier-lam', badge: 'badge-lam', weight: 4 };
-            return { class: 'tier-xanh', badge: 'badge-xanh', weight: 5 }; // Hoa phẩm xanh lá
+            return { class: 'tier-xanh', badge: 'badge-xanh', weight: 5 };
         }
 
         function sortFlowersByTier(flowerArray) {
@@ -517,79 +510,30 @@ const firebaseConfig = {
             resetGroupForm();
         });
 
-        function renderSuperAdminTable() {
-            const tbody = document.getElementById('superAdminGroupTable'); tbody.innerHTML = '';
-            Object.keys(DB.groups).forEach(id => {
-                const leader = (DB.members[id] || []).find(m => m.role === "Hội trưởng") || { name: "Chưa có", phone: "-" };
-                tbody.innerHTML += `
-                    <tr>
-                        <td><strong>${DB.groups[id].name}</strong></td>
-                        <td><span class="text-primary fw-bold">${leader.name}</span></td>
-                        <td><code>${leader.phone}</code></td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editGroupData('${id}')">Sửa</button>
-                            <button class="btn btn-sm btn-outline-danger py-0" onclick="deleteGroupData('${id}')">Xóa</button>
-                        </td>
-                    </tr>`;
-            });
-        }
-
-        window.editGroupData = function(id) {
-            const group = DB.groups[id];
-            const leader = (DB.members[id] || []).find(m => m.role === "Hội trưởng") || { name: "", phone: "" };
-            document.getElementById('editGroupId').value = id;
-            document.getElementById('gName').value = group.name;
-            document.getElementById('gLeaderName').value = leader.name;
-            document.getElementById('gLeaderPhone').value = leader.phone;
-            document.getElementById('groupFormTitle').innerHTML = `<i class="bi bi-pencil-square text-warning"></i> Sửa Thông Tin`;
-            document.getElementById('btnCancelEditGroup').classList.remove('d-none');
-            document.getElementById('btnSubmitGroup').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
-        }
-
-        window.resetGroupForm = function() {
-            document.getElementById('createGroupForm').reset();
-            document.getElementById('editGroupId').value = "";
-            document.getElementById('groupFormTitle').innerHTML = `<i class="bi bi-plus-circle-fill"></i> Khởi Tạo Hội Đoàn Mới`;
-            document.getElementById('btnCancelEditGroup').classList.add('d-none');
-            document.getElementById('btnSubmitGroup').className = "btn btn-primary btn-sm flex-grow-1 fw-bold";
-        }
-
-        window.deleteGroupData = function(id) {
-            if (confirm(`Xóa hoàn toàn hội "${DB.groups[id].name}" khỏi server đám mây?`)) {
-                delete DB.groups[id]; delete DB.members[id];
-                pushDataToServer();
+        document.getElementById('addFlowerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const editFId = document.getElementById('editFlowerId').value;
+            const name = document.getElementById('fName').value.trim();
+            const tier = document.getElementById('fTier').value;
+            const urlValue = document.getElementById('fUrl').value.trim();
+            
+            let finalImg = "";
+            if(urlValue !== "") {
+                finalImg = urlValue;
+            } else if(globalBase64Image !== "") {
+                finalImg = globalBase64Image;
             }
-        }
 
-document.getElementById('addFlowerForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const editFId = document.getElementById('editFlowerId').value;
-    const name = document.getElementById('fName').value.trim();
-    const tier = document.getElementById('fTier').value;
-    const urlValue = document.getElementById('fUrl').value.trim();
-    
-    let finalImg = "";
-    if(urlValue !== "") {
-        finalImg = urlValue;
-    } else if(globalBase64Image !== "") {
-        finalImg = globalBase64Image;
-    }
-
-    if (editFId) {
-        // CHẾ ĐỘ CẬP NHẬT/SỬA LỖI HÌNH ẢNH HOẶC TÊN HOA
-        let idx = DB.globalFlowers.findIndex(f => f.id === editFId);
-        if (idx !== -1) {
-            DB.globalFlowers[idx].name = name;
-            DB.globalFlowers[idx].tier = tier;
-            // Nếu admin không dán hoặc không nhập ảnh mới, giữ nguyên hình ảnh cũ đang chạy
-            if(finalImg !== "") {
-                DB.globalFlowers[idx].img = finalImg;
-            }                    }
-                    alert(`Đã sửa lỗi hiển thị/cập nhật hoa [${name}] thành công! Lựa chọn của thành viên giữ nguyên.`);
+            if (editFId) {
+                let idx = DB.globalFlowers.findIndex(f => f.id === editFId);
+                if (idx !== -1) {
+                    DB.globalFlowers[idx].name = name;
+                    DB.globalFlowers[idx].tier = tier;
+                    if(finalImg !== "") DB.globalFlowers[idx].img = finalImg;
+                    alert(`Cập nhật hoa [${name}] thành công!`);
                 }
             } else {
-                // CHẾ ĐỘ THÊM HOA MỚI TINH
-                if (finalImg === "") return alert('Vui lòng chọn link ảnh mạng HOẶC dán file ảnh cho hoa mới!');
+                if (finalImg === "") return alert('Vui lòng chọn link ảnh mạng hoặc dán file ảnh!');
                 DB.globalFlowers.push({ 
                     id: "FL_" + Date.now(), 
                     name: name, 
@@ -604,10 +548,10 @@ document.getElementById('addFlowerForm').addEventListener('submit', function(e) 
             renderSuperAdminFlowers();
         });
 
-window.editFlowerData = function(id) {
-            // Tìm kiếm dữ liệu gốc từ bộ nhớ dựa vào ID được truyền tới
+        // GIẢI PHÁP AN TOÀN TUYỆT ĐỐI: CHỈ TRUYỀN ID SỬ DỤNG BỘ NHỚ DATA GỐC, TRÁNH LỖI NHÁY ĐƠN
+        window.editFlowerData = function(id) {
             const flower = (DB.globalFlowers || []).find(f => f.id === id);
-            if (!flower) return alert("Không tìm thấy dữ liệu hoa!");
+            if (!flower) return;
 
             document.getElementById('editFlowerId').value = flower.id;
             document.getElementById('fName').value = flower.name;
@@ -639,10 +583,57 @@ window.editFlowerData = function(id) {
             document.getElementById('flowerFormTitle').innerHTML = `<i class="bi bi-flower1"></i> Thêm Hoa Hệ Thống`;
             document.getElementById('btnCancelEditFlower').classList.add('d-none');
             document.getElementById('btnSubmitFlower').className = "btn btn-success btn-sm flex-grow-1 fw-bold";
-            document.getElementById('btnSubmitFlower').textContent = "Thêm Vào Đám Mây";
+            document.getElementById('btnSubmitFlower').textContent = "Thêm Vào Kho Đám Mây";
         }
 
-function renderSuperAdminFlowers() {
+        // Tối ưu hóa render loại bỏ hoàn toàn thuộc tính onclick truyền chuỗi
+        function renderSuperAdminTable() {
+            const tbody = document.getElementById('superAdminGroupTable'); 
+            tbody.innerHTML = '';
+            Object.keys(DB.groups).forEach(id => {
+                const leader = (DB.members[id] || []).find(m => m.role === "Hội trưởng") || { name: "Chưa có", phone: "-" };
+                
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${DB.groups[id].name}</strong></td>
+                    <td>${leader.name}</td>
+                    <td><code>${leader.phone}</code></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-primary py-0 me-1 btn-edit-g">Sửa</button>
+                        <button class="btn btn-sm btn-outline-danger py-0 btn-del-g">Xóa</button>
+                    </td>`;
+                
+                tr.querySelector('.btn-edit-g').addEventListener('click', () => {
+                    document.getElementById('editGroupId').value = id;
+                    document.getElementById('gName').value = DB.groups[id].name;
+                    document.getElementById('gLeaderName').value = leader.name;
+                    document.getElementById('gLeaderPhone').value = leader.phone;
+                    document.getElementById('groupFormTitle').innerHTML = `<i class="bi bi-pencil-square text-warning"></i> Cập Nhật Thông Tin Hội`;
+                    document.getElementById('btnCancelEditGroup').classList.remove('d-none');
+                    document.getElementById('btnSubmitGroup').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
+                });
+
+                tr.querySelector('.btn-del-g').addEventListener('click', () => {
+                    if(confirm('Bạn có chắc muốn xóa Hội này cùng toàn bộ danh sách thành viên đi kèm không?')){
+                        delete DB.groups[id];
+                        delete DB.members[id];
+                        pushDataToServer();
+                    }
+                });
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        function resetGroupForm() {
+            document.getElementById('createGroupForm').reset();
+            document.getElementById('editGroupId').value = "";
+            document.getElementById('groupFormTitle').innerHTML = `<i class="bi bi-plus-circle-fill"></i> Khởi Tạo Hội hoa viên`;
+            document.getElementById('btnCancelEditGroup').classList.add('d-none');
+            document.getElementById('btnSubmitGroup').className = "btn btn-primary btn-sm flex-grow-1 fw-bold";
+        }
+
+        function renderSuperAdminFlowers() {
             const tbody = document.getElementById('superAdminFlowerTable'); 
             if(!tbody) return;
             tbody.innerHTML = '';
@@ -655,301 +646,287 @@ function renderSuperAdminFlowers() {
                 if(searchKw !== "" && !f.name.toLowerCase().includes(searchKw)) return;
                 const badgeInfo = getTierClass(f.tier);
                 
-                // Giải pháp an toàn tuyệt đối: Chỉ truyền f.id vào hàm onclick
-                tbody.innerHTML += `
-                    <tr>
-                        <td><img src="${f.img}" style="width:35px;height:35px;object-fit:cover;border-radius:4px;"></td>
-                        <td><strong>${f.name}</strong></td>
-                        <td><span class="badge ${badgeInfo.badge}">${f.tier}</span></td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData('${f.id}')">Sửa</button>
-                            <button class="btn btn-sm btn-outline-danger py-0" onclick="deleteGlobalFlower('${f.id}')">Xóa</button>
-                        </td>
-                    </tr>`;
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><img src="${f.img}" style="width:35px;height:35px;object-fit:cover;border-radius:4px;"></td>
+                    <td><strong>${f.name}</strong></td>
+                    <td><span class="badge ${badgeInfo.badge}">${f.tier}</span></td>
+                    <td class="text-center">
+                        <button class="btn btn-sm btn-outline-warning py-0 me-1 btn-edit-f">Sửa</button>
+                        <button class="btn btn-sm btn-outline-danger py-0 btn-del-f">Xóa</button>
+                    </td>`;
+                
+                tr.querySelector('.btn-edit-f').addEventListener('click', () => editFlowerData(f.id));
+                tr.querySelector('.btn-del-f').addEventListener('click', () => {
+                    if(confirm('Xác nhận xóa loài hoa này khỏi hệ thống kho mẫu đám mây?')){
+                        DB.globalFlowers = DB.globalFlowers.filter(fl => fl.id !== f.id);
+                        pushDataToServer();
+                    }
+                });
+                
+                tbody.appendChild(tr);
             });
         }
-            if(filteredFlowers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted small py-3">Không tìm thấy hoa phù hợp</td></tr>`;
-            }
-        }
 
-        function deleteGlobalFlower(fId) {
-            if(confirm('Xóa loài hoa này khỏi mạng chung đám mây? Các thành viên sở hữu loại hoa này cũng sẽ bị mất liên kết.')) {
-                DB.globalFlowers = DB.globalFlowers.filter(gf => gf.id !== fId);
-                Object.keys(DB.members).forEach(gId => { 
-                    DB.members[gId].forEach(m => { 
-                        if(m.ownedFlowers) m.ownedFlowers = m.ownedFlowers.filter(id => id !== fId); 
-                    }); 
-                });
-                pushDataToServer();
-                resetFlowerForm();
-            }
-        }
-
-        document.getElementById('userLoginForm').addEventListener('submit', function(e) {
+        document.getElementById('userLoginForm').addEventListener('submit', function(e){
             e.preventDefault();
             const gId = document.getElementById('loginGroup').value;
             const phone = document.getElementById('userPhone').value.trim();
-            const user = (DB.members[gId] || []).find(m => m.phone === phone);
-            if(!user) return alert('SĐT này chưa được cấp tài khoản trong Hội này!');
-
-            currentUser = user; currentGroupId = gId;
-            document.getElementById('loginSection').classList.add('d-none');
-            document.getElementById('mainSection').classList.remove('d-none');
-            document.getElementById('currentGroupName').textContent = DB.groups[currentGroupId].name;
-            document.getElementById('userRoleBadge').textContent = currentUser.role;
-
-            // KIỂM TRA PHÂN QUYỀN: Chỉ Hội trưởng và Hội phó mới thấy menu quản lý
-            const isLeader = (currentUser.role === 'Hội trưởng' || currentUser.role === 'Hội phó');
+            if(!gId) return alert('Vui lòng chọn một Hội!');
             
-            // Xử lý ẩn/hiện nút bấm trên thanh Tab Header và cả nội dung Panel bên dưới
-            document.querySelectorAll('.id-leader-only').forEach(el => { isLeader ? el.classList.remove('d-none') : el.classList.add('d-none'); });
+            const members = DB.members[gId] || [];
+            const user = members.find(m => m.phone === phone);
             
-            cancelLeaderAssignment();
-
-            // Kích hoạt mặc định quay về tab đầu tiên một cách an toàn
-            const firstTabBtn = document.querySelector('#tab-stats-btn');
-            if (firstTabBtn) {
-                const tabTrigger = new bootstrap.Tab(firstTabBtn);
-                tabTrigger.show();
+            if(user) {
+                currentUser = user;
+                currentGroupId = gId;
+                document.getElementById('currentGroupName').textContent = DB.groups[gId].name;
+                document.getElementById('userRoleBadge').textContent = user.role;
+                document.getElementById('userRoleBadge').className = `badge ${getRoleBadgeClass(user.role)} px-3 py-2 rounded-pill fw-bold`;
+                
+                document.getElementById('loginSection').classList.add('d-none');
+                document.getElementById('mainSection').classList.remove('d-none');
+                
+                if(['Hội trưởng','Hội phó','Quản lý'].includes(user.role)) {
+                    document.querySelectorAll('.id-leader-only').forEach(el => el.classList.remove('d-none'));
+                } else {
+                    document.querySelectorAll('.id-leader-only').forEach(el => el.classList.add('d-none'));
+                }
+                
+                bootstrap.Tab.getOrCreateInstance(document.getElementById('tab-stats-btn')).show();
+                renderStats();
+            } else {
+                alert('Mật khẩu đăng nhập không đúng!');
             }
-            renderStats();
         });
 
         function logout() {
-            currentUser = null; currentGroupId = null;
-            document.getElementById('mainSection').classList.add('d-none');
+            currentUser = null;
+            currentGroupId = null;
+            document.getElementById('superPhone').value = "";
+            document.getElementById('userPhone').value = "";
             document.getElementById('superAdminSection').classList.add('d-none');
+            document.getElementById('mainSection').classList.add('d-none');
             document.getElementById('loginSection').classList.remove('d-none');
-            document.getElementById('superLoginForm').reset(); document.getElementById('userLoginForm').reset();
+            resetFlowerForm();
+            resetGroupForm();
         }
 
-        window.renderStats = function() {
-            const container = document.getElementById('flowerGridContainer'); container.innerHTML = '';
+        function renderStats() {
+            const container = document.getElementById('flowerGridContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            const searchKw = document.getElementById('gridSearchFlower').value.toLowerCase().trim();
             const members = DB.members[currentGroupId] || [];
-            const keyword = document.getElementById('gridSearchFlower').value.trim().toLowerCase();
-            const sortedFlowers = sortFlowersByTier(DB.globalFlowers);
-
-            const filteredAndOwnedFlowers = sortedFlowers.filter(f => {
-                const matchesKeyword = f.name.toLowerCase().includes(keyword);
-                const ownersCount = members.filter(m => m.ownedFlowers && m.ownedFlowers.includes(f.id)).length;
-                return matchesKeyword && ownersCount > 0;
-            });
-
-            filteredAndOwnedFlowers.forEach(f => {
-                const owners = members.filter(m => m.ownedFlowers && m.ownedFlowers.includes(f.id));
-                const cfg = getTierClass(f.tier);
-
+            const allGlobal = DB.globalFlowers || [];
+            
+            let sortedFlowers = sortFlowersByTier(allGlobal);
+            
+            sortedFlowers.forEach(f => {
+                if(searchKw !== "" && !f.name.toLowerCase().includes(searchKw)) return;
+                
+                let owners = [];
+                members.forEach(m => {
+                    if((m.ownedFlowers || []).includes(f.id)) owners.push(m);
+                });
+                
+                if(owners.length === 0 && searchKw === "") return; 
+                
+                const tierInfo = getTierClass(f.tier);
+                let ownersHtml = owners.map(o => `<span class="member-tag"><i class="bi bi-person"></i> ${o.name} <span class="role-badge ${getRoleBadgeClass(o.role)}">${o.role}</span></span>`).join('');
+                if(owners.length === 0) ownersHtml = '<span class="text-muted small italic d-block mt-1">Chưa ai có</span>';
+                
                 container.innerHTML += `
-                    <div class="col-6 col-sm-4 col-md-3 col-xl-2 mb-2 px-1">
-                        <div class="flower-grid-card ${cfg.class}">
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                        <div class="flower-grid-card ${tierInfo.class}">
                             <img src="${f.img}" class="flower-grid-img" alt="${f.name}">
                             <div class="flower-grid-body">
                                 <h6>${f.name}</h6>
-                                <div><span class="badge ${cfg.badge}" style="font-size:0.65rem;">${f.tier}</span></div>
-                                <div class="mt-1 text-success fw-bold" style="font-size:0.75rem;">Tổng: ${owners.length} người</div>
+                                <span class="badge ${tierInfo.badge} mx-auto" style="font-size:0.65rem;">${f.tier}</span>
                             </div>
                             <div class="flower-grid-footer">
-                                ${owners.map(o => `
-                                    <span class="member-tag">
-                                        ${o.name} <span class="badge ${getRoleBadgeClass(o.role)} role-badge">${o.role[0]}</span>
-                                    </span>
-                                `).join('')}
+                                <div class="fw-bold text-dark small mb-1" style="font-size:0.72rem;">Sở hữu (${owners.length}):</div>
+                                <div style="max-height:65px; overflow-y:auto;">${ownersHtml}</div>
                             </div>
                         </div>
                     </div>`;
             });
-
-            if(filteredAndOwnedFlowers.length === 0) {
-                container.innerHTML = `<div class="col-12 text-center text-muted py-5">Không có dữ liệu hoa hiển thị.</div>`;
-            }
         }
-        // TÙY CHỈNH: Thiết kế khu vực "Hoa Tôi Sở Hữu" thành dạng Grid lưới đồng bộ hệ thống
-        window.initMyFlowerSelection = function() {
-            const container = document.getElementById('myFlowersListContainer'); container.innerHTML = '';
-            const owned = currentUser.ownedFlowers || [];
-            const keyword = document.getElementById('memberSearchFlower').value.trim().toLowerCase();
-            const sortedFlowers = sortFlowersByTier(DB.globalFlowers);
-            const filteredFlowers = sortedFlowers.filter(f => f.name.toLowerCase().includes(keyword));
 
-            filteredFlowers.forEach(f => {
-                const isChecked = owned.includes(f.id) ? 'checked' : '';
-                const cfg = getTierClass(f.tier);
+        function initMyFlowerSelection() {
+            const container = document.getElementById('myFlowersListContainer');
+            if(!container) return;
+            container.innerHTML = '';
+            
+            const searchKw = document.getElementById('memberSearchFlower').value.toLowerCase().trim();
+            const allGlobal = DB.globalFlowers || [];
+            let sortedFlowers = sortFlowersByTier(allGlobal);
+            const myFlowers = currentUser.ownedFlowers || [];
+            
+            sortedFlowers.forEach(f => {
+                if(searchKw !== "" && !f.name.toLowerCase().includes(searchKw)) return;
+                
+                const tierInfo = getTierClass(f.tier);
+                const isChecked = myFlowers.includes(f.id) ? 'checked' : '';
+                
                 container.innerHTML += `
-                    <div class="col-6 col-sm-4 col-md-3 col-xl-2 mb-2 px-1">
-                        <div class="flower-grid-card ${cfg.class}">
-                            <input class="form-check-input flower-check-input my-flower-cb" type="checkbox" value="${f.id}" id="cb-${f.id}" ${isChecked}>
+                    <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                        <div class="flower-grid-card ${tierInfo.class}">
+                            <input type="checkbox" name="myFlowers" value="${f.id}" class="form-check-input flower-check-input shadow-sm" ${isChecked}>
                             <img src="${f.img}" class="flower-grid-img" alt="${f.name}">
                             <div class="flower-grid-body">
-                                <label class="fw-bold mb-1 d-block text-dark small" style="cursor:pointer;" for="cb-${f.id}">${f.name}</label>
-                                <div><span class="badge ${cfg.badge}" style="font-size:0.65rem;">${f.tier}</span></div>
+                                <h6>${f.name}</h6>
+                                <span class="badge ${tierInfo.badge} mx-auto" style="font-size:0.65rem;">${f.tier}</span>
                             </div>
                         </div>
                     </div>`;
             });
-
-            if(filteredFlowers.length === 0) {
-                container.innerHTML = `<div class="col-12 text-center text-muted py-3">Không có loài hoa nào khớp với từ khóa tìm kiếm.</div>`;
-            }
         }
 
-        document.getElementById('myFlowersForm').addEventListener('submit', function(e) {
+        document.getElementById('myFlowersForm').addEventListener('submit', function(e){
             e.preventDefault();
-            const currentlyChecked = Array.from(document.querySelectorAll('.my-flower-cb:checked')).map(cb => cb.value);
-            const currentlyUnchecked = Array.from(document.querySelectorAll('.my-flower-cb:not(:checked)')).map(cb => cb.value);
-
-            let owned = currentUser.ownedFlowers || [];
-            currentlyChecked.forEach(id => { if(!owned.includes(id)) owned.push(id); });
-            owned = owned.filter(id => !currentlyUnchecked.includes(id));
-
-            const memberInDb = DB.members[currentGroupId].find(m => m.phone === currentUser.phone);
-            if(memberInDb) {
-                memberInDb.ownedFlowers = owned;
-                currentUser.ownedFlowers = owned;
+            const checkboxes = document.querySelectorAll('input[name="myFlowers"]:checked');
+            let selectedIds = [];
+            checkboxes.forEach(cb => selectedIds.push(cb.value));
+            
+            let members = DB.members[currentGroupId] || [];
+            let myIdx = members.findIndex(m => m.phone === currentUser.phone);
+            if(myIdx !== -1) {
+                members[myIdx].ownedFlowers = selectedIds;
+                currentUser.ownedFlowers = selectedIds;
                 pushDataToServer();
-                alert('Vườn hoa của bạn đã được đồng bộ lên toàn hệ thống!');
+                alert('Đã cập nhật danh sách hoa sở hữu thành công!');
+                bootstrap.Tab.getOrCreateInstance(document.getElementById('tab-stats-btn')).show();
+                renderStats();
             }
         });
 
         function renderAdminMembers() {
-            const tbody = document.getElementById('adminMembersTableBody'); if(!tbody) return;
+            const tbody = document.getElementById('adminMembersTableBody');
+            if(!tbody) return;
             tbody.innerHTML = '';
+            
             const members = DB.members[currentGroupId] || [];
-
             members.forEach(m => {
-                let actionContent = '-';
-                if (m.phone !== currentUser.phone) {
-                    let canManage = (currentUser.role === 'Hội trưởng') || (currentUser.role === 'Hội phó' && m.role !== 'Hội trưởng');
-                    if (canManage) {
-                        actionContent = `
-                            <button class="btn btn-sm btn-outline-primary py-0 me-1 fw-bold" onclick="editMemberData(${m.id})">Sửa TK</button>
-                            <button class="btn btn-sm btn-warning py-0 me-1 fw-bold" onclick="openLeaderAssign('${m.phone}', '${m.name}')">Chọn Hoa</button>
-                            <button class="btn btn-sm btn-outline-danger py-0" onclick="deleteMember(${m.id}, '${m.name}')">Xóa</button>
-                        `;
-                    }
-                } else {
-                    actionContent = `<span class="text-muted small">Tài khoản của bạn</span>`;
-                }
-                
-                tbody.innerHTML += `
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
                     <tr>
-                        <td class="fw-bold">${m.name}</td>
+                        <td><strong>${m.name}</strong></td>
                         <td><code>${m.phone}</code></td>
                         <td><span class="badge ${getRoleBadgeClass(m.role)}">${m.role}</span></td>
-                        <td class="text-center">${actionContent}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-warning py-0 me-1 btn-assign-f"><i class="bi bi-flower2"></i> Cấp Hoa hộ</button>
+                            <button class="btn btn-sm btn-outline-primary py-0 me-1 btn-edit-m">Sửa</button>
+                            <button class="btn btn-sm btn-outline-danger py-0 btn-del-m">Xóa</button>
+                        </td>
                     </tr>`;
+                
+                tr.querySelector('.btn-assign-f').addEventListener('click', () => openLeaderAssign(m.name, m.phone));
+                
+                tr.querySelector('.btn-edit-m').addEventListener('click', () => {
+                    document.getElementById('editMemberId').value = m.id;
+                    document.getElementById('mName').value = m.name;
+                    document.getElementById('mPhone').value = m.phone;
+                    document.getElementById('mRole').value = m.role;
+                    document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-pencil-square"></i> Cập Nhật Thành Viên`;
+                    document.getElementById('btnCancelEditMember').classList.remove('d-none');
+                    document.getElementById('btnSubmitMember').textContent = "Lưu Sửa Đổi";
+                    document.getElementById('btnSubmitMember').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
+                });
+
+                tr.querySelector('.btn-del-m').addEventListener('click', () => {
+                    if(currentUser.id.toString() === m.id.toString()) return alert('Bạn không thể tự xóa chính mình!');
+                    if(confirm(`Xác nhận xóa tài khoản hội viên [${m.name}]?`)) {
+                        DB.members[currentGroupId] = (DB.members[currentGroupId] || []).filter(mb => mb.id.toString() !== m.id.toString());
+                        pushDataToServer();
+                        renderAdminMembers();
+                    }
+                });
+
+                tbody.appendChild(tr);
             });
         }
-    // TÙY CHỈNH BỔ SUNG: Cho phép sửa đổi thông tin của Thành viên
-        window.editMemberData = function(id) {
-            const members = DB.members[currentGroupId] || [];
-            const member = members.find(m => m.id === id);
-            if(!member) return;
 
-            document.getElementById('editMemberId').value = member.id;
-            document.getElementById('mName').value = member.name;
-            document.getElementById('mPhone').value = member.phone;
-            document.getElementById('mRole').value = member.role;
-
-            document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-pencil-square text-warning"></i> Sửa Thông Tin Thành Viên`;
-            document.getElementById('btnCancelEditMember').classList.remove('d-none');
-            document.getElementById('btnSubmitMember').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
-            document.getElementById('btnSubmitMember').textContent = "Cập Nhật Thành Viên";
-        }
-
-        window.resetMemberForm = function() {
-            document.getElementById('addMemberForm').reset();
-            document.getElementById('editMemberId').value = "";
-            document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-person-plus"></i> Cấp Tài Khoản Mới`;
-            document.getElementById('btnCancelEditMember').classList.add('d-none');
-            document.getElementById('btnSubmitMember').className = "btn btn-danger btn-sm flex-grow-1 fw-bold";
-            document.getElementById('btnSubmitMember').textContent = "Xác Nhận Tạo TK";
-        }
-
-        document.getElementById('addMemberForm').addEventListener('submit', function(e) {
+        document.getElementById('addMemberForm').addEventListener('submit', function(e){
             e.preventDefault();
-            const members = DB.members[currentGroupId] || [];
-            const idEdit = document.getElementById('editMemberId').value;
+            const editId = document.getElementById('editMemberId').value;
             const name = document.getElementById('mName').value.trim();
             const phone = document.getElementById('mPhone').value.trim();
             const role = document.getElementById('mRole').value;
-
-            if(idEdit) {
-                // Đang chế độ sửa thông tin thành viên
-                const mIdx = members.findIndex(m => m.id == idEdit);
-                if(mIdx !== -1) {
-                    // Kiểm tra SĐT mới có trùng với người khác hay không
-                    if(members.some((m, idx) => m.phone === phone && idx !== mIdx)) {
-                        return alert('SĐT này đã được sử dụng bởi thành viên khác!');
-                    }
-                    DB.members[currentGroupId][mIdx].name = name;
-                    DB.members[currentGroupId][mIdx].phone = phone;
-                    DB.members[currentGroupId][mIdx].role = role;
-                    alert('Đã cập nhật thông tin thành viên thành công!');
+            
+            let members = DB.members[currentGroupId] || [];
+            
+            if(editId) {
+                let idx = members.findIndex(m => m.id.toString() === editId);
+                if(idx !== -1) {
+                    members[idx].name = name;
+                    members[idx].phone = phone;
+                    members[idx].role = role;
+                    alert('Cập nhật thành viên thành công!');
                 }
             } else {
-                // Chế độ tạo mới bình thường
-                if(members.some(m => m.phone === phone)) return alert('SĐT này đã tồn tại trong Hội!');
-                DB.members[currentGroupId].push({
-                    id: Date.now(),
-                    name: name,
-                    phone: phone,
-                    role: role,
-                    ownedFlowers: []
-                });
-                alert('Tạo thành viên thành công lên máy chủ mạng!');
+                if(members.some(m => m.phone === phone)) return alert('SĐT này đã tồn tại!');
+                members.push({ id: Date.now(), name: name, phone: phone, role: role, ownedFlowers: [] });
+                alert('Cấp tài khoản mới thành công!');
             }
             
             pushDataToServer();
             resetMemberForm();
+            renderAdminMembers();
         });
 
-        window.openLeaderAssign = function(targetPhone, targetName) {
-            document.getElementById('assignTargetName').textContent = targetName;
-            document.getElementById('assignTargetPhone').value = targetPhone;
-            const members = DB.members[currentGroupId] || [];
-            const targetUser = members.find(m => m.phone === targetPhone);
-            const owned = targetUser ? (targetUser.ownedFlowers || []) : [];
-
-            const listContainer = document.getElementById('leaderAssignList');
-            listContainer.innerHTML = '';
-            const sortedFlowers = sortFlowersByTier(DB.globalFlowers);
-
-            sortedFlowers.forEach(f => {
-                const isChecked = owned.includes(f.id) ? 'checked' : '';
-                listContainer.innerHTML += `
-                    <div class="d-flex align-items-center p-1 border-bottom bg-white">
-                        <input class="form-check-input me-2 leader-assign-cb" type="checkbox" value="${f.id}" id="assign-cb-${f.id}" ${isChecked}>
-                        <img src="${f.img}" width="30" height="30" style="object-fit:cover; border-radius:4px;" class="me-2">
-                        <label class="form-check-label small text-dark" for="assign-cb-${f.id}">${f.name}</label>
-                    </div>`;
-            });
-            document.getElementById('leaderAssignSection').classList.remove('d-none');
+        function resetMemberForm() {
+            document.getElementById('addMemberForm').reset();
+            document.getElementById('editMemberId').value = "";
+            document.getElementById('memberFormTitle').innerHTML = `<i class="bi bi-person-plus"></i> Cấp Tài Khoản Mới`;
+            document.getElementById('btnCancelEditMember').classList.add('d-none');
+            document.getElementById('btnSubmitMember').textContent = "Xác Nhận Tạo TK";
+            document.getElementById('btnSubmitMember').className = "btn btn-danger btn-sm flex-grow-1 fw-bold";
         }
 
-        window.cancelLeaderAssignment = function() {
+        function openLeaderAssign(name, phone) {
+            document.getElementById('leaderAssignSection').classList.remove('d-none');
+            document.getElementById('assignTargetName').textContent = name;
+            document.getElementById('assignTargetPhone').value = phone;
+            
+            const members = DB.members[currentGroupId] || [];
+            const targetUser = members.find(m => m.phone === phone);
+            const targetFlowers = targetUser ? (targetUser.ownedFlowers || []) : [];
+            
+            const listContainer = document.getElementById('leaderAssignList');
+            listContainer.innerHTML = '';
+            
+            let sortedFlowers = sortFlowersByTier(DB.globalFlowers || []);
+            sortedFlowers.forEach(f => {
+                const checked = targetFlowers.includes(f.id) ? 'checked' : '';
+                listContainer.innerHTML += `
+                    <label class="d-flex align-items-center gap-2 p-1 border-bottom bg-white rounded my-1" style="cursor:pointer;">
+                        <input type="checkbox" name="leaderAssignFlower" value="${f.id}" ${checked}>
+                        <img src="${f.img}" style="width:25px;height:25px;object-fit:cover;border-radius:3px;">
+                        <span class="small fw-bold text-truncate">${f.name}</span>
+                    </label>`;
+            });
+        }
+
+        function cancelLeaderAssignment() {
             document.getElementById('leaderAssignSection').classList.add('d-none');
         }
 
-        window.saveLeaderAssignment = function() {
-            const targetPhone = document.getElementById('assignTargetPhone').value;
-            const selected = Array.from(document.querySelectorAll('.leader-assign-cb:checked')).map(cb => cb.value);
-            const members = DB.members[currentGroupId] || [];
-            const targetUser = members.find(m => m.phone === targetPhone);
-
-            if(targetUser) {
-                targetUser.ownedFlowers = selected;
+        function saveLeaderAssignment() {
+            const phone = document.getElementById('assignTargetPhone').value;
+            const checkboxes = document.querySelectorAll('input[name="leaderAssignFlower"]:checked');
+            let selectedIds = [];
+            checkboxes.forEach(cb => selectedIds.push(cb.value));
+            
+            let members = DB.members[currentGroupId] || [];
+            let idx = members.findIndex(m => m.phone === phone);
+            if(idx !== -1) {
+                members[idx].ownedFlowers = selectedIds;
                 pushDataToServer();
-                alert(`Cập nhật hoa thành công!`);
+                alert(`Đã cập nhật vườn hoa thành công!`);
                 cancelLeaderAssignment();
-            }
-        }
-        window.deleteMember = function(id, name) {
-            if(confirm(`Xóa tài khoản [ ${name} ] khỏi cơ sở dữ liệu chung?`)) {
-                DB.members[currentGroupId] = DB.members[currentGroupId].filter(m => m.id !== id);
-                pushDataToServer();
-                cancelLeaderAssignment();
-                resetMemberForm();
+                renderStats();
             }
         }
     </script>
