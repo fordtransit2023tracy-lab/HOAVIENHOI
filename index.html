@@ -66,7 +66,7 @@
         <div class="row g-3">
             <div class="col-12">
                 <div class="card p-3 shadow-sm border-start border-primary border-4">
-                    <h6 class="fw-bold text-primary mb-1"><i class="bi bi-cpu-fill"></i> ADMIN TỐI CAO</h6>
+                    <h6 class="fw-bold text-primary mb-1"><i class="bi bi-cpu-fill"></i> ADMIN </h6>
                     <form id="superLoginForm" class="row g-2">
                         <div class="col-8">
                             <input type="tel" id="superPhone" class="form-control form-control-sm" placeholder="Ví dụ 000" required>
@@ -87,8 +87,8 @@
                             <select id="loginGroup" class="form-select" required><option value="">Đang tải danh sách từ máy chủ...</option></select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label small fw-bold">2. Nhập số điện thoại:</label>
-                            <input type="tel" id="userPhone" class="form-control" placeholder="Nhập SĐT..." required>
+                            <label class="form-label small fw-bold">2. Nhập mật khẩu:</label>
+                            <input type="tel" id="userPhone" class="form-control" placeholder="Nhập MK..." required>
                         </div>
                         <button type="submit" class="btn btn-success w-100 fw-bold rounded-pill">ĐĂNG NHẬP NGAY</button>
                     </form>
@@ -100,7 +100,7 @@
     <div id="superAdminSection" class="d-none">
         <nav class="navbar navbar-dark bg-super-admin sticky-top shadow-sm">
             <div class="container">
-                <span class="navbar-brand d-flex align-items-center fw-bold"><i class="bi bi-cpu-fill me-2"></i> BAN QUẢN TRỊ TỐI CAO</span>
+                <span class="navbar-brand d-flex align-items-center fw-bold"><i class="bi bi-cpu-fill me-2"></i> BAN QUẢN TRỊ HỘI</span>
                 <button class="btn btn-sm btn-light rounded-pill fw-bold" onclick="logout()"><i class="bi bi-box-arrow-right"></i> Đăng xuất</button>
             </div>
         </nav>
@@ -108,7 +108,7 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card p-3 mb-3">
-                        <h6 class="fw-bold text-primary mb-2" id="groupFormTitle"><i class="bi bi-plus-circle-fill"></i> Khởi Tạo Hội Đoàn Mới</h6>
+                        <h6 class="fw-bold text-primary mb-2" id="groupFormTitle"><i class="bi bi-plus-circle-fill"></i> Khởi Tạo Hội hoa viên</h6>
                         <form id="createGroupForm">
                             <input type="hidden" id="editGroupId" value="">
                             <input type="text" id="gName" class="form-control form-control-sm mb-2" placeholder="Tên Hội" required>
@@ -124,6 +124,9 @@
                     <div class="card p-3">
                         <h6 class="fw-bold text-success mb-2"><i class="bi bi-flower1"></i> Thêm Hoa Hệ Thống</h6>
                         <form id="addFlowerForm">
+                        <!-- Dòng ẩn này mới được thêm vào để lưu ID khi sửa hoa -->
+                        <input type="hidden" id="editFlowerId" value="">
+                            
                             <input type="text" id="fName" class="form-control form-control-sm mb-2" placeholder="Tên loài hoa" required>
                             <select id="fTier" class="form-select form-select-sm mb-2">
                                 <option value="Hoa phẩm đỏ">Hoa phẩm đỏ</option>
@@ -146,7 +149,12 @@
                                 </div>
                             </div>
                             <img id="fPreview" class="preview-img">
-                            <button type="submit" class="btn btn-success btn-sm w-100 fw-bold mt-2">Thêm Vào Kho Đám Mây</button>
+                            
+                            <!-- Cụm nút bấm này được cải tiến để có thêm nút "Hủy" khi đang sửa -->
+                            <div class="d-flex gap-2 mt-2">
+                             <button type="submit" class="btn btn-success btn-sm w-100 fw-bold mt-2">Thêm Vào Kho Đám Mây</button>
+                             <button type="button" id="btnCancelEditFlower" class="btn btn-secondary btn-sm d-none" onclick="resetFlowerForm()">Hủy</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -377,6 +385,7 @@ const firebaseConfig = {
                     if (freshUser) currentUser = freshUser;
                 }
                 renderStats();
+                initMyFlowerSelection();
                 renderAdminMembers();
             }
         });
@@ -474,7 +483,7 @@ const firebaseConfig = {
                 renderSuperAdminTable();
                 renderSuperAdminFlowers();
             } else {
-                alert('Sai số điện thoại Admin!');
+                alert('Sai mật khẩu Admin!');
             }
         });
 
@@ -501,7 +510,7 @@ const firebaseConfig = {
                 const gId = "G_" + Date.now();
                 DB.groups[gId] = { name: name };
                 DB.members[gId] = [{ id: Date.now(), name: lName, phone: lPhone, role: "Hội trưởng", ownedFlowers: [] }];
-                alert('Khởi tạo hội đoàn thành công đám mây!');
+                alert('Khởi tạo thành công Hội hoa viên!');
             }
 
             pushDataToServer();
@@ -552,32 +561,82 @@ const firebaseConfig = {
             }
         }
 
-        document.getElementById('addFlowerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const urlValue = document.getElementById('fUrl').value.trim();
-            let finalImg = "";
+document.getElementById('addFlowerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const editFId = document.getElementById('editFlowerId').value;
+    const name = document.getElementById('fName').value.trim();
+    const tier = document.getElementById('fTier').value;
+    const urlValue = document.getElementById('fUrl').value.trim();
+    
+    let finalImg = "";
+    if(urlValue !== "") {
+        finalImg = urlValue;
+    } else if(globalBase64Image !== "") {
+        finalImg = globalBase64Image;
+    }
 
-            if(urlValue !== "") {
-                finalImg = urlValue;
-            } else if(globalBase64Image !== "") {
-                finalImg = globalBase64Image;
+    if (editFId) {
+        // CHẾ ĐỘ CẬP NHẬT/SỬA LỖI HÌNH ẢNH HOẶC TÊN HOA
+        let idx = DB.globalFlowers.findIndex(f => f.id === editFId);
+        if (idx !== -1) {
+            DB.globalFlowers[idx].name = name;
+            DB.globalFlowers[idx].tier = tier;
+            // Nếu admin không dán hoặc không nhập ảnh mới, giữ nguyên hình ảnh cũ đang chạy
+            if(finalImg !== "") {
+                DB.globalFlowers[idx].img = finalImg;
+            }                    }
+                    alert(`Đã sửa lỗi hiển thị/cập nhật hoa [${name}] thành công! Lựa chọn của thành viên giữ nguyên.`);
+                }
             } else {
-                return alert('Vui lòng chọn link ảnh mạng HOẶC dán file ảnh!');
+                // CHẾ ĐỘ THÊM HOA MỚI TINH
+                if (finalImg === "") return alert('Vui lòng chọn link ảnh mạng HOẶC dán file ảnh cho hoa mới!');
+                DB.globalFlowers.push({ 
+                    id: "FL_" + Date.now(), 
+                    name: name, 
+                    img: finalImg, 
+                    tier: tier 
+                });
+                alert('Đã thêm hoa mới lên hệ thống đám mây!');
             }
-
-            DB.globalFlowers.push({ 
-                id: "FL_" + Date.now(), 
-                name: document.getElementById('fName').value.trim(), 
-                img: finalImg, 
-                tier: document.getElementById('fTier').value 
-            });
             
             pushDataToServer();
-            this.reset();
-            globalBase64Image = ""; 
-            document.getElementById('fPreview').style.display = "none";
-            alert('Đã cập nhật hoa mới lên hệ thống đám mây công cộng!');
+            resetFlowerForm();
+            renderSuperAdminFlowers();
         });
+
+        window.editFlowerData = function(id, name, tier, img) {
+            document.getElementById('editFlowerId').value = id;
+            document.getElementById('fName').value = name;
+            document.getElementById('fTier').value = tier;
+            
+            if (img.startsWith('http')) {
+                document.getElementById('fUrl').value = img;
+                globalBase64Image = "";
+            } else {
+                document.getElementById('fUrl').value = "";
+                globalBase64Image = img; // Lưu trữ Base64 cũ
+            }
+            
+            const preview = document.getElementById('fPreview');
+            preview.src = img;
+            preview.style.display = "block";
+
+            document.getElementById('flowerFormTitle').innerHTML = `<i class="bi bi-pencil-square text-warning"></i> Sửa Lỗi Hiển Thị Hoa`;
+            document.getElementById('btnCancelEditFlower').classList.remove('d-none');
+            document.getElementById('btnSubmitFlower').className = "btn btn-warning btn-sm flex-grow-1 fw-bold";
+            document.getElementById('btnSubmitFlower').textContent = "Cập Nhật Hoa";
+        }
+
+        window.resetFlowerForm = function() {
+            document.getElementById('addFlowerForm').reset();
+            document.getElementById('editFlowerId').value = "";
+            globalBase64Image = "";
+            document.getElementById('fPreview').style.display = "none";
+            document.getElementById('flowerFormTitle').innerHTML = `<i class="bi bi-flower1"></i> Thêm Hoa Hệ Thống`;
+            document.getElementById('btnCancelEditFlower').classList.add('d-none');
+            document.getElementById('btnSubmitFlower').className = "btn btn-success btn-sm flex-grow-1 fw-bold";
+            document.getElementById('btnSubmitFlower').textContent = "Thêm Vào Đám Mây";
+        }
 
         function renderSuperAdminFlowers() {
             const tbody = document.getElementById('superAdminFlowerTable'); tbody.innerHTML = '';
@@ -587,14 +646,17 @@ const firebaseConfig = {
             const filteredFlowers = sortedGlobal.filter(f => f.name.toLowerCase().includes(keyword));
 
             filteredFlowers.forEach((f) => {
-                const originalIndex = DB.globalFlowers.findIndex(gf => gf.id === f.id);
+                'const originalIndex = DB.globalFlowers.findIndex(gf => gf.id === f.id);
                 const cfg = getTierClass(f.tier);
                 tbody.innerHTML += `
                     <tr class="${cfg.class}">
                         <td><img src="${f.img}" width="38" height="38" style="object-fit:cover; border-radius:4px;"></td>
                         <td><strong>${f.name}</strong></td>
                         <td><span class="badge ${cfg.badge}">${f.tier}</span></td>
-                        <td class="text-center"><button class="btn btn-sm btn-danger py-0" onclick="deleteGlobalFlower(${originalIndex})">Xóa</button></td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-warning py-0 me-1" onclick="editFlowerData('${f.id}', '${f.name}', '${f.tier}', '${safeImg}')">Sửa</button>
+                            <button class="btn btn-sm btn-danger py-0" onclick="deleteGlobalFlower('${f.id}')">Xóa</button>
+                        </td>
                     </tr>`;
             });
             if(filteredFlowers.length === 0) {
@@ -602,11 +664,16 @@ const firebaseConfig = {
             }
         }
 
-        function deleteGlobalFlower(idx) {
-            if(confirm('Xóa loài hoa này khỏi mạng chung đám mây?')) {
-                const fId = DB.globalFlowers[idx].id; DB.globalFlowers.splice(idx, 1);
-                Object.keys(DB.members).forEach(gId => { DB.members[gId].forEach(m => { if(m.ownedFlowers) m.ownedFlowers = m.ownedFlowers.filter(id => id !== fId); }); });
+        function deleteGlobalFlower(fId) {
+            if(confirm('Xóa loài hoa này khỏi mạng chung đám mây? Các thành viên sở hữu loại hoa này cũng sẽ bị mất liên kết.')) {
+                DB.globalFlowers = DB.globalFlowers.filter(gf => gf.id !== fId);
+                Object.keys(DB.members).forEach(gId => { 
+                    DB.members[gId].forEach(m => { 
+                        if(m.ownedFlowers) m.ownedFlowers = m.ownedFlowers.filter(id => id !== fId); 
+                    }); 
+                });
                 pushDataToServer();
+                resetFlowerForm();
             }
         }
 
